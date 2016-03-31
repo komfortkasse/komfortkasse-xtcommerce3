@@ -1,0 +1,23 @@
+// Komfortkasse
+define('KOMFORTKASSE_ACTIVATE_EXPORT_TITLE', 'Export Bestellungen');
+define('KOMFORTKASSE_ACTIVATE_EXPORT_DESC', 'Export von Bestellungen aktiv');
+define('KOMFORTKASSE_ACTIVATE_UPDATE_TITLE', 'Update Bestellungen');
+define('KOMFORTKASSE_ACTIVATE_UPDATE_DESC', 'Update von Bestellungen aktiv');
+define('KOMFORTKASSE_PAYMENT_CODES_TITLE', 'Zahlungsart Codes');
+define('KOMFORTKASSE_PAYMENT_CODES_DESC', 'Alle Zahlungsart Codes die exportiert werden sollen. Syntax: moneyorder,eustandardtransfer');
+define('KOMFORTKASSE_STATUS_OPEN_TITLE', 'Status offen');
+define('KOMFORTKASSE_STATUS_OPEN_DESC', 'Bestellstatus die fuer den Export beruecksichtigt werden sollen (offene Bestellungen)');
+define('KOMFORTKASSE_STATUS_PAID_TITLE', 'Status Zahlung erhalten');
+define('KOMFORTKASSE_STATUS_PAID_DESC', 'Bestellstatus, auf den Bestellungen gesetzt werden sollen zu denen eine Zahlung zugeordnet werden konnte.');
+define('KOMFORTKASSE_STATUS_CANCELLED_TITLE', 'Status storniert');
+define('KOMFORTKASSE_STATUS_CANCELLED_DESC', 'Bestellstatus, auf den Bestellungen gesetzt werden sollen die storniert wurden.');
+define('KOMFORTKASSE_ENCRYPTION_TITLE', 'Verschluesselung');
+define('KOMFORTKASSE_ENCRYPTION_DESC', 'Auswahl der Verschluesselungstechnik. Nicht aendern! Wird automatisch von Komfortkasse gesetzt.');
+define('KOMFORTKASSE_ACCESSCODE_TITLE', 'Zugriffscode (verschluesselt)');
+define('KOMFORTKASSE_ACCESSCODE_DESC', 'Verschluesselter Zugriffscode. Nicht aendern! Wird automatisch von Komfortkasse gesetzt.');
+define('KOMFORTKASSE_APIKEY_TITLE', 'API Schluessel');
+define('KOMFORTKASSE_APIKEY_DESC', 'Schluessel fuer den Zugriff auf die Komfortkasse API. Nicht aendern! Wird automatisch von Komfortkasse gesetzt.');
+define('KOMFORTKASSE_PUBLICKEY_TITLE', 'Oeffentlicher Schluessel');
+define('KOMFORTKASSE_PUBLICKEY_DESC', 'Schluessel zur Verschluesselung der Daten die an Komfortkasse gesendet werden. Nicht aendern! Wird automatisch von Komfortkasse gesetzt.');
+define('KOMFORTKASSE_PRIVATEKEY_TITLE', 'Privater Schluessel');
+define('KOMFORTKASSE_PRIVATEKEY_DESC', 'Schluessel zur Entschluesselung der Daten die von Komfortkasse empfangen werden. Nicht aendern! Wird automatisch von Komfortkasse gesetzt.');
