@@ -18,22 +18,59 @@ class Komfortkasse_Order {
 		
 		$ret = array ();
 		
-		$sql = "select orders_id from " . TABLE_ORDERS . " where orders_status in (" . Komfortkasse_Config::getConfig(Komfortkasse_Config::status_open) . ") and ( ";
-		$paycodes = preg_split ('/,/', Komfortkasse_Config::getConfig(Komfortkasse_Config::payment_methods));	
-		for($i=0; $i<count($paycodes);$i++) {
-			$sql .= " payment_method like '" . $paycodes[$i] . "' ";
-			if ($i < count($paycodes)-1) {
-				$sql .= " or ";
-			}
-		}	
-		$sql .= " )";
-		$orders_q=xtc_db_query($sql);
-		
-		while ($orders_a=xtc_db_fetch_array($orders_q)) {
-			$ret [] = $orders_a ['orders_id'];
-		}
+        if (Komfortkasse_Config::getConfig(Komfortkasse_Config::status_open) != '' && Komfortkasse_Config::getConfig(Komfortkasse_Config::payment_methods) != '') {
+            $sql = "select orders_id from " . TABLE_ORDERS . " where orders_status in (" . Komfortkasse_Config::getConfig(Komfortkasse_Config::status_open) . ") and ( ";
+            $paycodes = preg_split('/,/', Komfortkasse_Config::getConfig(Komfortkasse_Config::payment_methods));
+            for($i = 0; $i < count($paycodes); $i++) {
+                $sql .= " payment_method like '" . $paycodes [$i] . "' ";
+                if ($i < count($paycodes) - 1) {
+                    $sql .= " or ";
+                }
+            }
+            $sql .= " )";
+            $orders_q = xtc_db_query($sql);
+            
+            while ( $orders_a = xtc_db_fetch_array($orders_q) ) {
+                $ret [] = $orders_a ['orders_id'];
+            }
+        }
 
-		return $ret;
+        if (Komfortkasse_Config::getConfig(Komfortkasse_Config::status_open_invoice) != '' && Komfortkasse_Config::getConfig(Komfortkasse_Config::payment_methods_invoice) != '') {
+            $sql = "select orders_id from " . TABLE_ORDERS . " where orders_status in (" . Komfortkasse_Config::getConfig(Komfortkasse_Config::status_open_invoice) . ") and ( ";
+            $paycodes = preg_split('/,/', Komfortkasse_Config::getConfig(Komfortkasse_Config::payment_methods_invoice));
+            for($i = 0; $i < count($paycodes); $i++) {
+                $sql .= " payment_method like '" . $paycodes [$i] . "' ";
+                if ($i < count($paycodes) - 1) {
+                    $sql .= " or ";
+                }
+            }
+            $sql .= " )";
+            $orders_q = xtc_db_query($sql);
+        
+            while ( $orders_a = xtc_db_fetch_array($orders_q) ) {
+                $ret [] = $orders_a ['orders_id'];
+            }
+        }
+        
+        if (Komfortkasse_Config::getConfig(Komfortkasse_Config::status_open_cod) != '' && Komfortkasse_Config::getConfig(Komfortkasse_Config::payment_methods_cod) != '') {
+            $sql = "select orders_id from " . TABLE_ORDERS . " where orders_status in (" . Komfortkasse_Config::getConfig(Komfortkasse_Config::status_open_cod) . ") and ( ";
+            $paycodes = preg_split('/,/', Komfortkasse_Config::getConfig(Komfortkasse_Config::payment_methods_cod));
+            for($i = 0; $i < count($paycodes); $i++) {
+                $sql .= " payment_method like '" . $paycodes [$i] . "' ";
+                if ($i < count($paycodes) - 1) {
+                    $sql .= " or ";
+                }
+            }
+            $sql .= " )";
+            $orders_q = xtc_db_query($sql);
+        
+            while ( $orders_a = xtc_db_fetch_array($orders_q) ) {
+                $ret [] = $orders_a ['orders_id'];
+            }
+        }
+        
+        
+        return $ret;
 	}
 	public static function getOrder($number) {
 		require_once DIR_WS_CLASSES . 'order.php';
@@ -52,21 +89,29 @@ class Komfortkasse_Order {
 		$lang = $lang_a['code'];
 		
 		$ret = array ();
-		$ret ['number'] = $number;
-		$ret ['date'] = date("d.m.Y", strtotime($order->info ['date_purchased']));
-		$ret ['email'] = $order->customer['email_address'];
-		$ret ['customer_number'] = $order->customer ['csID'];
-		$ret ['payment_method'] = $order->info ['payment_method'];
-		$ret ['amount'] = $total;
-		$ret ['currency_code'] = $order->info ['currency'];
-		$ret ['exchange_rate'] = $order->info ['currency_value'];
-		$ret ['language_code'] = $lang;
-		$ret ['delivery_firstname'] = $order->delivery ['firstname'];
-		$ret ['delivery_lastname'] = $order->delivery ['lastname'];
-		$ret ['delivery_company'] = $order->delivery ['company'];
-		$ret ['billing_firstname'] = $order->billing ['firstname'];
-		$ret ['billing_lastname'] = $order->billing ['lastname'];
-		$ret ['billing_company'] = $order->billing ['company'];
+        $ret ['number'] = $number;
+        $ret ['date'] = date("d.m.Y", strtotime($order->info ['date_purchased']));
+        $ret ['email'] = $order->customer ['email_address'];
+        $ret ['customer_number'] = $order->customer ['csID'];
+        $ret ['payment_method'] = $order->info ['payment_method'];
+        $ret ['amount'] = $total;
+        $ret ['currency_code'] = $order->info ['currency'];
+        $ret ['exchange_rate'] = $order->info ['currency_value'];
+        $ret ['language_code'] = $lang . '-' . $order->billing ['country_iso_2'];
+        $ret ['delivery_firstname'] = $order->delivery ['firstname'];
+        $ret ['delivery_lastname'] = $order->delivery ['lastname'];
+        $ret ['delivery_company'] = $order->delivery ['company'];
+        $ret ['delivery_street'] = $order->delivery ['street_address'];
+        $ret ['delivery_postcode'] = $order->delivery ['postcode'];
+        $ret ['delivery_city'] = $order->delivery ['city'];
+        $ret ['delivery_countrycode'] = $order->delivery ['country_iso_2'];
+        $ret ['billing_firstname'] = $order->billing ['firstname'];
+        $ret ['billing_lastname'] = $order->billing ['lastname'];
+        $ret ['billing_company'] = $order->billing ['company'];
+        $ret ['billing_street'] = $order->billing ['street_address'];
+        $ret ['billing_postcode'] = $order->billing ['postcode'];
+        $ret ['billing_city'] = $order->billing ['city'];
+        $ret ['billing_countrycode'] = $order->billing ['country_iso_2'];
 
 		$order_products = $order->products;
 		foreach ( $order_products as $product ) {

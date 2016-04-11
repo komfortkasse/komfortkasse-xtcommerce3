@@ -10,8 +10,9 @@
  * delete from configuration where configuration_key like 'KOMFORTKASSE%';
  */
 
-// error_reporting(E_ALL);
-// ini_set('display_errors', '1');
+#error_reporting(E_ALL);
+#ini_set('display_errors', '1');
+$basedir = explode('callback', $_SERVER['SCRIPT_NAME']) ;
 
 ?>
 <html>
@@ -31,8 +32,11 @@ Note: if the installer exits before step <?php echo $steps; ?> without an error 
 Including files...
 
 <?php
-require_once ('../../includes/configure.php');
-require_once ('../../includes/application_top_callback.php');
+
+
+$basepath = explode('callback', $_SERVER['SCRIPT_FILENAME']) ;
+require_once ($basepath[0].'includes/configure.php');
+require_once (DIR_WS_INCLUDES.'application_top_callback.php');
 require_once ('Komfortkasse_Config.php');
 ?>
 
@@ -148,11 +152,12 @@ Creating Configuration ...
 
 <?php
 $sort_order = 1;
+include_once 'install_defaults.php';
 
 $sql_data_array = array (
 		'configuration_group_id' => $config_group_id,
 		'configuration_key' => Komfortkasse_Config::activate_export,
-		'configuration_value' => 'true',
+		'configuration_value' => KOMFORTKASSE_ACTIVATE_EXPORT_DEFAULT,
 		'set_function' => 'xtc_cfg_select_option(array(\'true\', \'false\'),',
 		'sort_order' => $sort_order 
 );
@@ -162,7 +167,7 @@ $sort_order++;
 $sql_data_array = array (
 		'configuration_group_id' => $config_group_id,
 		'configuration_key' => Komfortkasse_Config::activate_update,
-		'configuration_value' => 'true',
+		'configuration_value' => KOMFORTKASSE_ACTIVATE_UPDATE_DEFAULT,
 		'set_function' => 'xtc_cfg_select_option(array(\'true\', \'false\'),',
 		'sort_order' => $sort_order 
 );
@@ -172,7 +177,7 @@ $sort_order++;
 $sql_data_array = array (
 		'configuration_group_id' => $config_group_id,
 		'configuration_key' => Komfortkasse_Config::payment_methods,
-		'configuration_value' => 'moneyorder,eustandardtransfer',
+		'configuration_value' => KOMFORTKASSE_PAYMENT_METHODS_DEFAULT,
 		'sort_order' => $sort_order 
 );
 xtc_db_perform(TABLE_CONFIGURATION, $sql_data_array);
@@ -181,7 +186,7 @@ $sort_order++;
 $sql_data_array = array (
 		'configuration_group_id' => $config_group_id,
 		'configuration_key' => Komfortkasse_Config::status_open,
-		'configuration_value' => '1',
+		'configuration_value' => KOMFORTKASSE_STATUS_OPEN_DEFAULT,
 		'sort_order' => $sort_order 
 );
 xtc_db_perform(TABLE_CONFIGURATION, $sql_data_array);
@@ -190,7 +195,7 @@ $sort_order++;
 $sql_data_array = array (
 		'configuration_group_id' => $config_group_id,
 		'configuration_key' => Komfortkasse_Config::status_paid,
-		'configuration_value' => '2',
+		'configuration_value' => KOMFORTKASSE_STATUS_PAID_DEFAULT,
 		'use_function' => 'xtc_get_order_status_name',
 		'set_function' => 'xtc_cfg_pull_down_order_statuses(',
 		'sort_order' => $sort_order 
@@ -201,13 +206,94 @@ $sort_order++;
 $sql_data_array = array (
 		'configuration_group_id' => $config_group_id,
 		'configuration_key' => Komfortkasse_Config::status_cancelled,
-		'configuration_value' => '4',
+		'configuration_value' => KOMFORTKASSE_STATUS_CANCELLED_DEFAULT,
 		'use_function' => 'xtc_get_order_status_name',
 		'set_function' => 'xtc_cfg_pull_down_order_statuses(',
 		'sort_order' => $sort_order 
 );
 xtc_db_perform(TABLE_CONFIGURATION, $sql_data_array);
 $sort_order++;
+
+$sql_data_array = array (
+		'configuration_group_id' => $config_group_id,
+		'configuration_key' => Komfortkasse_Config::payment_methods_invoice,
+		'configuration_value' => KOMFORTKASSE_PAYMENT_CODES_INVOICE_DEFAULT,
+		'sort_order' => $sort_order
+);
+xtc_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+$sort_order++;
+
+$sql_data_array = array (
+		'configuration_group_id' => $config_group_id,
+		'configuration_key' => Komfortkasse_Config::status_open_invoice,
+		'configuration_value' => KOMFORTKASSE_STATUS_OPEN_INVOICE_DEFAULT,
+		'sort_order' => $sort_order
+);
+xtc_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+$sort_order++;
+
+$sql_data_array = array (
+		'configuration_group_id' => $config_group_id,
+		'configuration_key' => Komfortkasse_Config::status_paid_invoice,
+		'configuration_value' => KOMFORTKASSE_STATUS_PAID_INVOICE_DEFAULT,
+		'use_function' => 'xtc_get_order_status_name',
+		'set_function' => 'xtc_cfg_pull_down_order_statuses(',
+		'sort_order' => $sort_order
+);
+xtc_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+$sort_order++;
+
+$sql_data_array = array (
+		'configuration_group_id' => $config_group_id,
+		'configuration_key' => Komfortkasse_Config::status_cancelled_invoice,
+		'configuration_value' => KOMFORTKASSE_STATUS_CANCELLED_INVOICE_DEFAULT,
+		'use_function' => 'xtc_get_order_status_name',
+		'set_function' => 'xtc_cfg_pull_down_order_statuses(',
+		'sort_order' => $sort_order
+);
+xtc_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+$sort_order++;
+
+$sql_data_array = array (
+		'configuration_group_id' => $config_group_id,
+		'configuration_key' => Komfortkasse_Config::payment_methods_cod,
+		'configuration_value' => KOMFORTKASSE_PAYMENT_CODES_COD_DEFAULT,
+		'sort_order' => $sort_order
+);
+xtc_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+$sort_order++;
+
+$sql_data_array = array (
+		'configuration_group_id' => $config_group_id,
+		'configuration_key' => Komfortkasse_Config::status_open_cod,
+		'configuration_value' => KOMFORTKASSE_STATUS_OPEN_COD_DEFAULT,
+		'sort_order' => $sort_order
+);
+xtc_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+$sort_order++;
+
+$sql_data_array = array (
+		'configuration_group_id' => $config_group_id,
+		'configuration_key' => Komfortkasse_Config::status_paid_cod,
+		'configuration_value' => KOMFORTKASSE_STATUS_PAID_COD_DEFAULT,
+		'use_function' => 'xtc_get_order_status_name',
+		'set_function' => 'xtc_cfg_pull_down_order_statuses(',
+		'sort_order' => $sort_order
+);
+xtc_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+$sort_order++;
+
+$sql_data_array = array (
+		'configuration_group_id' => $config_group_id,
+		'configuration_key' => Komfortkasse_Config::status_cancelled_cod,
+		'configuration_value' => KOMFORTKASSE_STATUS_CANCELLED_COD_DEFAULT,
+		'use_function' => 'xtc_get_order_status_name',
+		'set_function' => 'xtc_cfg_pull_down_order_statuses(',
+		'sort_order' => $sort_order
+);
+xtc_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+$sort_order++;
+
 
 $sql_data_array = array (
 		'configuration_group_id' => $config_group_id,
@@ -278,7 +364,7 @@ if ($ok) {
 <br />
 	<br />
 	<b><?php echo ++$step;?>/<?php echo $steps;?></b> Finished. <a
-		href="<?php echo HTTP_SERVER?>/admin/configuration.php?gID=<?php echo $config_group_id; ?>"
+		href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$basedir[0];?>admin/configuration.php?gID=<?php echo $config_group_id; ?>"
 		target="_new">Please check the configuration now.</a><br /> (If you
 		cannot access this link, please login to your admin panel and open the
 		Komfortkasse configuration from the menu - should be the last menu
